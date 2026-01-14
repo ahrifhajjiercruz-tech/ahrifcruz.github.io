@@ -1,1 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Case Management Tool | Ahrif Cruz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🧪</span>
+                    <h1>Test Case Manager</h1>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-badge">
+                        <span class="stat-label">Total</span>
+                        <span class="stat-value" id="totalTests">0</span>
+                    </div>
+                    <div class="stat-badge pass">
+                        <span class="stat-label">Passed</span>
+                        <span class="stat-value" id="passedTests">0</span>
+                    </div>
+                    <div class="stat-badge fail">
+                        <span class="stat-label">Failed</span>
+                        <span class="stat-value" id="failedTests">0</span>
+                    </div>
+                    <div class="stat-badge blocked">
+                        <span class="stat-label">Blocked</span>
+                        <span class="stat-value" id="blockedTests">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+        <div class="container">
+            <button class="tab-btn active" data-tab="dashboard">
+                <span class="tab-icon">📊</span> Dashboard
+            </button>
+            <button class="tab-btn" data-tab="test-cases">
+                <span class="tab-icon">📝</span> Test Cases
+            </button>
+            <button class="tab-btn" data-tab="create">
+                <span class="tab-icon">➕</span> Create New
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="tab-content active">
+                <h2 class="section-title">Dashboard Overview</h2>
+                
+                <div class="dashboard-grid">
+                    <!-- Progress Chart -->
+                    <div class="dashboard-card">
+                        <h3>Test Execution Progress</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <p class="progress-text" id="progressText">0% Complete</p>
+                        </div>
+                    </div>
+
+                    <!-- Module Breakdown -->
+                    <div class="dashboard-card">
+                        <h3>Tests by Module</h3>
+                        <div id="moduleBreakdown" class="module-list">
+                            <p class="empty-state">No test cases yet. Create your first one!</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="dashboard-card full-width">
+                        <h3>Recent Test Cases</h3>
+                        <div id="recentTests" class="recent-list">
+                            <p class="empty-state">No recent activity</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Test Cases Tab -->
+            <section id="test-cases" class="tab-content">
+                <div class="test-cases-header">
+                    <h2 class="section-title">All Test Cases</h2>
+                    <div class="controls">
+                        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search test cases...">
+                        <select id="filterModule" class="filter-select">
+                            <option value="all">All Modules</option>
+                        </select>
+                        <select id="filterStatus" class="filter-select">
+                            <option value="all">All Status</option>
+                            <option value="not-run">Not Run</option>
+                            <option value="pass">Passed</option>
+                            <option value="fail">Failed</option>
+                            <option value="blocked">Blocked</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="test-table" id="testTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Module</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="testTableBody">
+                            <tr>
+                                <td colspan="7" class="empty-state">No test cases found. Create your first test case!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Create New Test Case Tab -->
+            <section id="create" class="tab-content">
+                <h2 class="section-title">Create New Test Case</h2>
+                
+                <form id="testCaseForm" class="test-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testTitle">Test Case Title *</label>
+                            <input type="text" id="testTitle" required placeholder="e.g., Login with valid credentials">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="testModule">Module *</label>
+                            <input type="text" id="testModule" required placeholder="e.g., Authentication" list="moduleList">
+                            <datalist id="moduleList"></datalist>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testPriority">Priority *</label>
+                            <select id="testPriority" required>
+                                <option value="">Select Priority</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="testStatus">Initial Status</label>
+                            <select id="testStatus">
+                                <option value="not-run">Not Run</option>
+                                <option value="pass">Pass</option>
+                                <option value="fail">Fail</option>
+                                <option value="blocked">Blocked</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="testPreconditions">Preconditions</label>
+                        <textarea id="testPreconditions" rows="3" placeholder="e.g., User must be logged out"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="testSteps">Test Steps *</label>
+                        <textarea id="testSteps" rows="5" required placeholder="1. Navigate to login page&#10;2. Enter valid username&#10;3. Enter valid password&#10;4. Click login button"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="testExpected">Expected Result *</label>
+                        <textarea id="testExpected" rows="3" required placeholder="User should be redirected to dashboard"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="testActual">Actual Result</label>
+                        <textarea id="testActual" rows="3" placeholder="Leave empty if not executed yet"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <span>✅</span> Create Test Case
+                        </button>
+                        <button type="reset" class="btn btn-secondary">
+                            <span>🔄</span> Reset Form
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Test Case Detail Modal -->
+    <div class="modal" id="testModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Test Case Details</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be dynamically inserted -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="editTestBtn">✏️ Edit</button>
+                <button class="btn btn-danger" id="deleteTestBtn">🗑️ Delete</button>
+                <button class="btn btn-primary" id="closeModalBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Test Case Management Tool © 2025 | Built by <strong>Ahrif Hajjie Cruz</strong></p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
